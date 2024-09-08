@@ -57,6 +57,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: test_grafana
     if: success()
+    permissions:
+      pull-requests: write
+      contents: write
     steps:
       - name: Auto-merge PR
         uses: peter-evans/auto-merge-action@v3
@@ -65,6 +68,3 @@ jobs:
           merge-method: squash
           branch: main
           commit-message: "Auto-merged after successful tests"
-        permissions:
-          pull-requests: write
-          contents: write
