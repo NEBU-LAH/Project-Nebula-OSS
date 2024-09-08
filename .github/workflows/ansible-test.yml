@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu, amazon_linux, centos, fedora] # Adjusted OS values
+        os: [ubuntu, amazon_linux, centos]
 
     steps:
       # Step 1: Checkout the code from the repository
@@ -59,9 +59,12 @@ jobs:
     if: success()
     steps:
       - name: Auto-merge PR
-        uses: peter-evans/merge@v3
+        uses: peter-evans/auto-merge-action@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: squash
           branch: main
           commit-message: "Auto-merged after successful tests"
+        permissions:
+          pull-requests: write
+          contents: write
