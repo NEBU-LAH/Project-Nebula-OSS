@@ -1,0 +1,4 @@
+---
+- name: Install Grafana on Fedora
+  shell: |
+    sudo dnf install -y https://dl.grafana.com/oss/release/grafana-latest-1.x86_64.rpm

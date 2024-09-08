@@ -1,0 +1,18 @@
+---
+dependencies: []
+galaxy_info:
+  author: NEBU SDN. BHD.
+  description: Ansible role to install and configure Grafana.
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - stretch
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+    - name: CentOS
+      versions:
+        - 7
+        - 8

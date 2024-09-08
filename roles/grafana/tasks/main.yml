@@ -1,0 +1,36 @@
+---
+- name: Install Grafana on {{ ansible_distribution }}
+  include_tasks: "{{ ansible_distribution | lower }}.yml"
+
+- name: Ensure Grafana is running and enabled
+  service:
+    name: grafana-server
+    state: started
+    enabled: yes
+
+- name: Check if Grafana is listening on port 3000
+  wait_for:
+    host: "127.0.0.1"
+    port: 3000
+    timeout: 30
+    state: started
+  register: grafana_status
+
+- name: Fail if Grafana is not running
+  fail:
+    msg: "Grafana is not running or not accessible on port 3000"
+  when: grafana_status.elapsed == 30
+
+- name: Wait for Grafana to be up and running
+  uri:
+    url: "http://localhost:3000/api/health"
+    status_code: 200
+    validate_certs: no
+  register: grafana_api
+  retries: 5
+  delay: 10
+
+- name: Fail if Grafana API is not accessible
+  fail:
+    msg: "Grafana API is not accessible"
+  when: grafana_api.status != 200

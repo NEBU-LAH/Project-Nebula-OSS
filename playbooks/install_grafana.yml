@@ -1,0 +1,14 @@
+# Playbook name: install_grafana.yml
+# Author: Abdulwahab Herbli
+# Creation Date: 9/9/2024
+# Last Modified Date: 9/9/2024
+# Description: Install Grafana across multiple OS
+# This code is licensed under the MIT License
+# Copyright (c) 2024, NEBU-LAH SDN. BHD.
+---
+- name: Install Grafana across multiple OS
+  hosts: all
+  become: yes
+
+  roles:
+    - grafana

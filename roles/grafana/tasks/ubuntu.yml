@@ -1,0 +1,11 @@
+---
+- name: Add Grafana APT repository
+  apt_repository:
+    repo: "deb https://packages.grafana.com/oss/deb stable main"
+    state: present
+
+- name: Install Grafana on Ubuntu
+  apt:
+    name: grafana
+    state: latest
+    update_cache: yes
