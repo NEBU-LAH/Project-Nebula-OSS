@@ -62,7 +62,7 @@ jobs:
       contents: write
     steps:
       - name: Auto-merge PR
-        uses: peter-evans/auto-merge-action@v3
+        uses: peter-evans/merge-or-squash@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: squash
