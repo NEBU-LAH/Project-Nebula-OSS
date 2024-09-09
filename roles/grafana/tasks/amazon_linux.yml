@@ -25,9 +25,8 @@
     dest: /tmp/grafana.rpm
   become: yes
 
-- name: Install Grafana from RPM
-  rpm:
-    name: /tmp/grafana.rpm
+- name: Install Grafana from RPM using the command module
+  command: rpm -ivh /tmp/grafana.rpm
   become: yes
 
 - name: Ensure Grafana is running and enabled
