@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test_grafana:
+  test_playbooks:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -52,7 +52,7 @@ jobs:
   # Auto-merge job after successful tests
   auto_merge:
     runs-on: ubuntu-latest
-    needs: test_grafana
+    needs: test_playbooks
     if: success()
     steps:
       - name: Checkout code

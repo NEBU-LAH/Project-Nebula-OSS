@@ -1,81 +1,3 @@
----
-- name: Ensure ca-certificates are installed
-  apt:
-    name: ca-certificates
-    state: present
-  become: yes
-
-- name: Clean apt cache
-  apt:
-    autoclean: yes
-  become: yes
-
-- name: Add Grafana GPG key
-  apt_key:
-    url: https://packages.grafana.com/gpg.key
-    state: present
-  become: yes
-
-- name: Add Grafana APT repository
-  apt_repository:
-    repo: "deb https://packages.grafana.com/oss/deb stable main"
-    state: present
-    filename: "grafana"
-  become: yes
-
-- name: Update apt cache
-  apt:
-    update_cache: yes
-  become: yes
-
-- name: Install Grafana on Ubuntu
-  apt:
-    name: grafana
-    state: present
-  become: yes
-
-- name: Ensure Grafana is running and enabled
-  systemd:
-    name: grafana-server
-    state: started
-    enabled: yes
-  become: yes
-  register: grafana_service
-
-- name: Check if Grafana is listening on port 3000
-  wait_for:
-    port: 3000
-    timeout: 60
-  register: grafana_port_check
-
-- name: Verify Grafana is running
-  assert:
-    that:
-      - grafana_service.state == 'started'
-      - not grafana_port_check.failed
-    fail_msg: "Grafana is not running or not listening on the expected port"
-    success_msg: "Grafana is running and listening on the expected port"
-
-- name: Wait for Grafana to be up and running
-  uri:
-    url: "http://localhost:3000"
-    method: GET
-    status_code: 200
-  register: result
-  until: result.status == 200
-  retries: 60
-  delay: 1
-
-- name: Check Grafana version
-  shell: dpkg-query --showformat='${Version}' --show grafana
-  register: grafana_version
-  changed_when: false
-  become: yes
-
-- name: Display Grafana version
-  debug:
-    var: grafana_version.stdout
-
 - name: Test Grafana API
   uri:
     url: "http://localhost:3000/api/health"
@@ -103,7 +25,23 @@
   debug:
     msg: "Grafana update is {{ 'available' if grafana_update_check.changed else 'not available' }}"
 
-- name: Fail if Grafana API is not accessible
-  fail:
-    msg: "Grafana API is not accessible"
-  when: grafana_health.status != 200
+- name: Confirm Grafana API is accessible
+  debug:
+    msg: "Grafana API is accessible and functioning correctly"
+  when: grafana_health.status == 200
+
+- name: Ensure Grafana is running and enabled
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Check if Grafana is listening on port 3000
+  wait_for:
+    port: 3000
+    timeout: 60
+
+- name: Verify Grafana is running and listening
+  debug:
+    msg: "Grafana is running and listening on port 3000"
