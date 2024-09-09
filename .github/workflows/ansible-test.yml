@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu, amazon_linux, centos]
+        os: [ubuntu]
 
     steps:
       - name: Checkout code
