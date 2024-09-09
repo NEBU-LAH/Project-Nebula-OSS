@@ -1,11 +1,23 @@
 ---
+- name: Ensure ca-certificates are installed
+  apt:
+    name: ca-certificates
+    state: present
+
+- name: Clean apt cache
+  command: apt-get clean
+
 - name: Add Grafana APT repository
   apt_repository:
     repo: "deb https://packages.grafana.com/oss/deb stable main"
     state: present
+    filename: "grafana"
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
 
 - name: Install Grafana on Ubuntu
   apt:
     name: grafana
     state: latest
-    update_cache: yes
