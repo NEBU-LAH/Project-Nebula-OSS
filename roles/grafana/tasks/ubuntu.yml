@@ -13,6 +13,7 @@
     state: present
     filename: "grafana"
 
+# This is important to make sure the system can find Grafana after adding the repository
 - name: Update apt cache
   apt:
     update_cache: yes
