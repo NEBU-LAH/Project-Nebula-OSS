@@ -5,7 +5,13 @@
     state: present
 
 - name: Clean apt cache
-  command: apt-get clean
+  apt:
+    autoclean: yes
+
+- name: Add Grafana GPG key
+  apt_key:
+    url: https://packages.grafana.com/gpg.key
+    state: present
 
 - name: Add Grafana APT repository
   apt_repository:
@@ -13,7 +19,6 @@
     state: present
     filename: "grafana"
 
-# This is important to make sure the system can find Grafana after adding the repository
 - name: Update apt cache
   apt:
     update_cache: yes
