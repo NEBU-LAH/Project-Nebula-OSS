@@ -37,8 +37,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install ansible==2.9.20 jinja2==2.11.3 markupsafe==2.0.1
 
-      - name: Install Ansible Roles
-        run: ansible-galaxy install -r requirements.yml
+      # - name: Install Ansible Roles
+      #   run: ansible-galaxy install -r requirements.yml
 
       - name: Run Ansible Playbook (Grafana)
         run: ansible-playbook playbooks/install_grafana.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution={{ matrix.os }}"
