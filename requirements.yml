@@ -1,4 +1,4 @@
----
-roles:
-  - name: grafana
-    src: atosatto.grafana
+# ---
+# roles:
+#   - name: grafana
+#     src: atosatto.grafana
