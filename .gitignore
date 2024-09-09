@@ -1,2 +1,6 @@
 .vscode
 conf_docker
+
+nebu-testing.pem
+
+inventories/production/hosts-prod.yml

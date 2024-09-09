@@ -1,8 +1,9 @@
 ---
-- name: Ensure ca-certificates are installed
+- name: Ensure ca-certificates are installed and updated
   apt:
     name: ca-certificates
-    state: present
+    state: latest
+    update_cache: yes
   become: yes
 
 - name: Clean apt cache
@@ -10,9 +11,13 @@
     autoclean: yes
   become: yes
 
-- name: Add Grafana GPG key
+- name: Download Grafana GPG key manually using curl
+  command: curl -fsSL https://packages.grafana.com/gpg.key -o /tmp/grafana.gpg.key
+  become: yes
+
+- name: Add Grafana GPG key from file
   apt_key:
-    url: https://packages.grafana.com/gpg.key
+    file: /tmp/grafana.gpg.key
     state: present
   become: yes
 

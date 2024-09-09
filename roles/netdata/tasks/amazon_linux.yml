@@ -1,0 +1,49 @@
+---
+- name: Install Python 3 on Amazon Linux if not installed
+  raw: sudo dnf install -y python3
+  become: yes
+  when: ansible_facts['pkg_mgr'] == 'yum'
+
+- name: Ensure Python 3 symlink exists (Amazon Linux)
+  command: ln -s /usr/bin/python3 /usr/bin/python
+  args:
+    creates: /usr/bin/python
+  become: yes
+  when: ansible_facts['pkg_mgr'] == 'yum'
+
+- name: Install firewalld and python3-firewalld bindings (Amazon Linux)
+  dnf:
+    name:
+      - firewalld
+      - python3-firewall # This package installs the required Python bindings
+    state: present
+  become: yes
+
+- name: Start and enable firewalld service
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Open port 19999 for Netdata on Amazon Linux
+  firewalld:
+    port: 19999/tcp # Directly open the Netdata port
+    permanent: yes
+    immediate: yes
+    state: enabled
+    zone: public
+  become: yes
+  when: ansible_facts['pkg_mgr'] == 'yum'
+
+- name: Install Netdata on Amazon Linux
+  shell: |
+    bash -c 'bash <(curl -SsL https://my-netdata.io/kickstart.sh) --stable-channel'
+  become: yes
+
+- name: Ensure Netdata service is started and enabled
+  systemd:
+    name: netdata
+    state: started
+    enabled: yes
+  become: yes

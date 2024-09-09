@@ -71,6 +71,21 @@ We are excited to have you onboard as a contributor! Follow the steps below to g
 8. **Submit a Pull Request**  
    Once you’re satisfied with your contribution, submit a pull request to the main repository. Our team will review your changes and merge them into the project.
 
+#### To help generate files for a new feature or tool, use:
+
+`python3 helper.py <tool-name>
+`
+
+#### To install using Docker:
+
+##### run this command to build:
+
+`docker build -t ansible-ubuntu-bash`
+
+##### and then run:
+
+`docker run --rm -it ansible-ubuntu-bash`
+
 ### Our mission: Top 50 DevOps Tools to Add
 
 Together, we are building a comprehensive collection of playbooks for the top 50 DevOps tools that are widely used in the industry. Here are the tools we are focusing on:
@@ -80,7 +95,7 @@ The ones struck-through are already available, feel free to review it and share 
 1. ~~**Grafana** - Monitoring and analytics platform.~~ ✅ Completed
 2. ~~**Prometheus** - Monitoring system and time-series database.~~ ✅ Completed
 3. **SonarQube** - Continuous inspection of code quality.
-4. **Netdata** - Real-time performance monitoring.
+4. ~~**Netdata** - Real-time performance monitoring.~~ ✅ Completed
 5. **Jenkins** - Automation server for continuous integration and delivery.
 6. **Docker** - Containerization platform for developing and running applications.
 7. **Kubernetes** - Container orchestration platform.

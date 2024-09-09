@@ -1,14 +1,15 @@
-# Playbook name: install_prometheus.yml
+# Playbook name: install_netdata.yml
 # Author: Abdulwahab Herbli
 # Creation Date: 9/9/2024
 # Last Modified Date: 9/9/2024
-# Description: Install prometheus multiple OS
+# Description: Install Netdata across multiple OS
 # This code is licensed under the MIT License
 # Copyright (c) 2024, NEBU-LAH SDN. BHD.
+
 ---
-- name: Install Prometheus on multiple OS
+- name: Install Netdata across multiple OS
   hosts: all
   become: yes
 
   roles:
-    - prometheus
+    - netdata

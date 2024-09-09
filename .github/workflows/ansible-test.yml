@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [amazon_linux]
+        os: [ubuntu, amazon_linux]
 
     steps:
       - name: Checkout code
@@ -37,30 +37,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install ansible==2.9.20 jinja2==2.11.3 markupsafe==2.0.1
 
-      # - name: Install Ansible Roles
-      #   run: ansible-galaxy install -r requirements.yml
-
       - name: Run Ansible Playbook (Grafana)
         run: ansible-playbook playbooks/install_grafana.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution=${{ matrix.os }}"
 
       - name: Run Ansible Playbook (Prometheus)
         run: ansible-playbook playbooks/install_prometheus.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution=${{ matrix.os }}"
 
+      - name: Run Ansible Playbook (Netdata)
+        run: ansible-playbook playbooks/install_prometheus.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution=${{ matrix.os }}"
+
         env:
           GRAFANA_VERSION: "9.5.1"
-
-  # Auto-merge job after successful tests
-  auto_merge:
-    runs-on: ubuntu-latest
-    needs: test_playbooks
-    if: success()
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Auto-merge PR
-        uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ github.event.pull_request.number }}
-          merge-method: squash

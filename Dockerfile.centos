@@ -1,0 +1,21 @@
+# Dockerfile for CentOS 7
+FROM centos:7
+
+# Install required dependencies
+RUN yum update -y && \
+    yum install -y \
+    epel-release \
+    ansible \
+    sudo \
+    python3 \
+    curl && \
+    yum clean all
+
+# Set up a working directory
+WORKDIR /ansible
+
+# Copy your Ansible files (optional, if testing locally you may mount the volume)
+COPY . /ansible
+
+# Set the default command to bash
+CMD ["/bin/bash"]

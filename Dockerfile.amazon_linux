@@ -1,0 +1,21 @@
+# Dockerfile for Amazon Linux 2
+FROM amazonlinux:2
+
+# Install required dependencies
+RUN yum update -y && \
+    amazon-linux-extras install epel -y && \
+    yum install -y \
+    python3 \
+    sudo \
+    curl \
+    ansible && \
+    yum clean all
+
+# Set up a working directory
+WORKDIR /ansible
+
+# Copy your Ansible files (optional, if testing locally you may mount the volume)
+COPY . /ansible
+
+# Set the default command to bash
+CMD ["/bin/bash"]

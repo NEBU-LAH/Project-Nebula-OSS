@@ -1,0 +1,24 @@
+# Dockerfile for Ubuntu
+FROM ubuntu:20.04
+
+# Install required dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    software-properties-common \
+    curl \
+    python3-pip \
+    ansible \
+    sudo && \
+    apt-get clean
+
+# Set up a working directory
+WORKDIR /ansible
+
+# Copy your Ansible files (optional, if testing locally you may mount the volume)
+COPY . /ansible
+
+# Install necessary Python modules
+RUN pip3 install --upgrade pip
+
+# Set the default command to bash
+CMD ["/bin/bash"]

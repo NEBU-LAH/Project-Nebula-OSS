@@ -1,41 +1,64 @@
 ---
 - name: Ensure ca-certificates are installed
-  yum:
+  dnf:
     name: ca-certificates
     state: present
-  become: yes
 
-- name: Create /etc/yum.repos.d directory if it does not exist
-  file:
-    path: /etc/yum.repos.d
-    state: directory
-    mode: "0755"
-  become: yes
+- name: Install Grafana dependencies
+  dnf:
+    name:
+      - fontconfig
+      - freetype
+      - urw-fonts
+    state: present
 
-- name: Clean yum cache
-  yum:
+- name: Clean dnf cache
+  dnf:
     name: "*"
     state: latest
     update_cache: yes
-  become: yes
 
 - name: Download Grafana RPM package
   get_url:
     url: https://dl.grafana.com/oss/release/grafana-9.5.1-1.x86_64.rpm
     dest: /tmp/grafana.rpm
-  become: yes
 
-- name: Install Grafana with yum
-  yum:
+- name: Install Grafana RPM package
+  dnf:
     name: /tmp/grafana.rpm
     state: present
+    disable_gpg_check: yes
+
+- name: Ensure proper permissions on Grafana directories
+  file:
+    path: /var/lib/grafana
+    owner: grafana
+    group: grafana
+    mode: "0755"
+    state: directory
   become: yes
 
-- name: Ensure Grafana is running and enabled
+- name: Check if Grafana service exists
+  command: systemctl status grafana-server
+  register: grafana_service_status
+  ignore_errors: yes
+
+- name: Debug Grafana service status
+  debug:
+    var: grafana_service_status
+
+- name: Ensure Grafana is running and enabled via systemd
   systemd:
     name: grafana-server
     state: started
     enabled: yes
+  become: yes
+  when: grafana_service_status.rc == 0
+
+# Fallback to manually start the Grafana service
+- name: Start Grafana manually if not running via systemd
+  command: sudo systemctl start grafana-server
+  when: grafana_service_status.rc != 0
   become: yes
 
 - name: Wait for Grafana to be up and running
@@ -60,19 +83,22 @@
   debug:
     var: grafana_health
 
-- name: Display Grafana version from health check
+- name: Check Grafana service logs
+  command: journalctl -u grafana-server --no-pager
+  register: grafana_service_logs
+  ignore_errors: yes
+
+- name: Display Grafana service logs
   debug:
-    msg: "Grafana version {{ grafana_health.json.version }} is installed"
-  when: grafana_health.status == 200
+    var: grafana_service_logs.stdout
 
 - name: Check for Grafana updates
-  yum:
+  dnf:
     name: grafana
     state: latest
     update_cache: yes
   check_mode: yes
   register: grafana_update_check
-  become: yes
 
 - name: Display update status
   debug:

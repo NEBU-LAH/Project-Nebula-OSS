@@ -1,0 +1,33 @@
+---
+- name: Install Python 3 on Amazon Linux
+  yum:
+    name: python3
+    state: present
+  become: yes
+
+- name: Create symlink for Python (if necessary)
+  command: ln -s /usr/bin/python3 /usr/bin/python
+  args:
+    creates: /usr/bin/python
+  become: yes
+
+- name: Install Netdata on Amazon Linux
+  shell: |
+    bash -c 'bash <(curl -SsL https://my-netdata.io/kickstart.sh) --stable-channel'
+  become: yes
+
+- name: Ensure Netdata service is started and enabled
+  systemd:
+    name: netdata
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Open port 19999 for Netdata on Amazon Linux
+  firewalld:
+    service: netdata
+    permanent: yes
+    immediate: yes
+    state: enabled
+    zone: public
+  become: yes

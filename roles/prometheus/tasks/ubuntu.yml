@@ -1,14 +1,23 @@
 ---
+- name: Update ca-certificates
+  apt:
+    name: ca-certificates
+    state: latest
+    update_cache: yes
+  become: yes
+
 - name: Ensure Prometheus directory exists
   file:
     path: /opt/prometheus
     state: directory
     mode: "0755"
+  become: yes
 
-- name: Download Prometheus
-  get_url:
-    url: https://github.com/prometheus/prometheus/releases/download/v2.32.1/prometheus-2.32.1.linux-amd64.tar.gz
-    dest: /tmp/prometheus.tar.gz
+- name: Download Prometheus using curl
+  command: curl -L -o /tmp/prometheus.tar.gz https://github.com/prometheus/prometheus/releases/download/v2.32.1/prometheus-2.32.1.linux-amd64.tar.gz
+  args:
+    creates: /tmp/prometheus.tar.gz
+  become: yes
 
 - name: Extract Prometheus
   unarchive:
@@ -17,24 +26,35 @@
     remote_src: yes
     creates: /opt/prometheus/prometheus
     extra_opts:
-      - --strip-components=1 # This ensures that files are placed directly in /opt/prometheus
+      - --strip-components=1
+  become: yes
 
 - name: List contents of /opt/prometheus to verify extraction
   command: ls -l /opt/prometheus
+  register: prometheus_contents
+  changed_when: false
+
+- name: Display Prometheus contents
+  debug:
+    var: prometheus_contents.stdout_lines
 
 - name: Copy Prometheus service file
   copy:
     src: prometheus.service
     dest: /etc/systemd/system/prometheus.service
+  become: yes
 
 - name: Check if systemd is available
   command: systemctl
   register: systemd_check
   ignore_errors: yes
+  changed_when: false
 
 - name: Reload systemd (for systems with systemd)
-  command: systemctl daemon-reload
+  systemd:
+    daemon_reload: yes
   when: systemd_check.rc == 0
+  become: yes
 
 - name: Enable and start Prometheus (for systems with systemd)
   systemd:
@@ -42,8 +62,9 @@
     enabled: yes
     state: started
   when: systemd_check.rc == 0
+  become: yes
 
-# Start Prometheus manually if systemd is not available
-- name: Start Prometheus manually
+- name: Start Prometheus manually (if systemd is not available)
   shell: "nohup /opt/prometheus/prometheus --config.file=/opt/prometheus/prometheus.yml > /dev/null 2>&1 &"
   when: systemd_check.rc != 0
+  become: yes
