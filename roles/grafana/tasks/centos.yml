@@ -1,4 +1,81 @@
 ---
+- name: Ensure ca-certificates are installed
+  yum:
+    name: ca-certificates
+    state: present
+  become: yes
+
+- name: Clean yum cache
+  yum:
+    name: "*"
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: Add Grafana YUM repository
+  yum_repository:
+    name: grafana
+    description: "Grafana OSS YUM Repository"
+    baseurl: https://packages.grafana.com/oss/rpm
+    gpgcheck: yes
+    gpgkey: https://packages.grafana.com/gpg.key
+    enabled: yes
+  become: yes
+
 - name: Install Grafana on CentOS
-  shell: |
-    sudo yum install -y https://dl.grafana.com/oss/release/grafana-latest-1.x86_64.rpm
+  yum:
+    name: grafana
+    state: latest
+  become: yes
+
+- name: Ensure Grafana is running and enabled
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Wait for Grafana to be up and running
+  wait_for:
+    port: 3000
+    timeout: 60
+
+- name: Pause for 10 seconds to allow Grafana to fully initialize
+  pause:
+    seconds: 10
+
+- name: Test Grafana API
+  uri:
+    url: "http://localhost:3000/api/health"
+    method: GET
+  register: grafana_health
+  retries: 3
+  delay: 5
+  until: grafana_health.status == 200
+
+- name: Display Grafana health check result
+  debug:
+    var: grafana_health
+
+- name: Display Grafana version from health check
+  debug:
+    msg: "Grafana version {{ grafana_health.json.version }} is installed"
+  when: grafana_health.status == 200
+
+- name: Check for Grafana updates
+  yum:
+    name: grafana
+    state: latest
+    update_cache: yes
+  check_mode: yes
+  register: grafana_update_check
+  become: yes
+
+- name: Display update status
+  debug:
+    msg: "Grafana update is {{ 'available' if grafana_update_check.changed else 'not available' }}"
+
+- name: Confirm Grafana API is accessible
+  debug:
+    msg: "Grafana API is accessible and functioning correctly"
+  when: grafana_health.status == 200
