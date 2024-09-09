@@ -40,6 +40,21 @@
     state: started
     enabled: yes
   become: yes
+  register: grafana_service
+
+- name: Check if Grafana is listening on port 3000
+  wait_for:
+    port: 3000
+    timeout: 60
+  register: grafana_port_check
+
+- name: Verify Grafana is running
+  assert:
+    that:
+      - grafana_service.state == 'started'
+      - not grafana_port_check.failed
+    fail_msg: "Grafana is not running or not listening on the expected port"
+    success_msg: "Grafana is running and listening on the expected port"
 
 - name: Wait for Grafana to be up and running
   uri:
@@ -61,17 +76,6 @@
   debug:
     var: grafana_version.stdout
 
-- name: Check Grafana service status
-  service:
-    name: grafana-server
-    state: started
-  register: grafana_service
-  become: yes
-
-- name: Display Grafana service status
-  debug:
-    var: grafana_service
-
 - name: Test Grafana API
   uri:
     url: "http://localhost:3000/api/health"
@@ -81,6 +85,23 @@
 - name: Display Grafana health check result
   debug:
     var: grafana_health
+
+- name: Display Grafana version from health check
+  debug:
+    msg: "Grafana version {{ grafana_health.json.version }} is installed"
+
+- name: Check for Grafana updates
+  apt:
+    name: grafana
+    state: latest
+    update_cache: yes
+  check_mode: yes
+  register: grafana_update_check
+  become: yes
+
+- name: Display update status
+  debug:
+    msg: "Grafana update is {{ 'available' if grafana_update_check.changed else 'not available' }}"
 
 - name: Fail if Grafana API is not accessible
   fail:
