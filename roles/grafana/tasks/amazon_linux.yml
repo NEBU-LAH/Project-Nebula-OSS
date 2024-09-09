@@ -19,7 +19,6 @@
     update_cache: yes
   become: yes
 
-# Skip YUM installation and directly go to RPM installation for Amazon Linux
 - name: Download Grafana RPM package
   get_url:
     url: https://dl.grafana.com/oss/release/grafana-9.5.1-1.x86_64.rpm
@@ -27,9 +26,8 @@
   become: yes
 
 - name: Install Grafana from RPM
-  yum:
+  rpm:
     name: /tmp/grafana.rpm
-    state: present
   become: yes
 
 - name: Ensure Grafana is running and enabled
