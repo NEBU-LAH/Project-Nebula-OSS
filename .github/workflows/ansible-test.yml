@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2 # Ensure repository is checked out
+        uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -41,9 +41,10 @@ jobs:
       #   run: ansible-galaxy install -r requirements.yml
 
       - name: Run Ansible Playbook (Grafana)
-        run: ansible-playbook playbooks/install_grafana.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution={{ matrix.os }}"
+        run: ansible-playbook playbooks/install_grafana.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution=${{ matrix.os }}"
+
       - name: Run Ansible Playbook (Prometheus)
-        run: ansible-playbook playbooks/install_prometheus.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution={{ matrix.os }}"
+        run: ansible-playbook playbooks/install_prometheus.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution=${{ matrix.os }}"
 
         env:
           GRAFANA_VERSION: "9.5.1"
@@ -54,7 +55,7 @@ jobs:
     needs: test_grafana
     if: success()
     steps:
-      - name: Checkout code # Add this step to ensure repository is checked out
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Auto-merge PR
