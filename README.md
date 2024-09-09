@@ -78,7 +78,7 @@ Together, we are building a comprehensive collection of playbooks for the top 50
 The ones struck-through are already available, feel free to review it and share feedback.
 
 1. ~~**Grafana** - Monitoring and analytics platform.~~ ✅ Completed
-2. **Prometheus** - Monitoring system and time-series database.
+2. ~~**Prometheus** - Monitoring system and time-series database.~~ ✅ Completed
 3. **SonarQube** - Continuous inspection of code quality.
 4. **Netdata** - Real-time performance monitoring.
 5. **Jenkins** - Automation server for continuous integration and delivery.

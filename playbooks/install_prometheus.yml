@@ -1,0 +1,7 @@
+---
+- name: Install Prometheus on multiple OS
+  hosts: all
+  become: yes
+
+  roles:
+    - prometheus

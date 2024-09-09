@@ -40,8 +40,11 @@ jobs:
       - name: Install Ansible Roles
         run: ansible-galaxy install -r requirements.yml
 
-      - name: Run Ansible Playbook
+      - name: Run Ansible Playbook (Grafana)
         run: ansible-playbook playbooks/install_grafana.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution={{ matrix.os }}"
+      - name: Run Ansible Playbook (Prometheus)
+        run: ansible-playbook playbooks/install_prometheus.yml -i inventories/staging/hosts.yml --extra-vars "ansible_distribution={{ matrix.os }}"
+
         env:
           GRAFANA_VERSION: "9.5.1"
 
