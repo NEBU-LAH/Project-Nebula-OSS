@@ -1,4 +1,10 @@
 ---
+- name: Ensure Prometheus directory exists
+  file:
+    path: /opt/prometheus
+    state: directory
+    mode: "0755"
+
 - name: Download Prometheus
   get_url:
     url: https://github.com/prometheus/prometheus/releases/download/v2.32.1/prometheus-2.32.1.linux-amd64.tar.gz
@@ -9,14 +15,35 @@
     src: /tmp/prometheus.tar.gz
     dest: /opt/prometheus/
     remote_src: yes
+    creates: /opt/prometheus/prometheus
+    extra_opts:
+      - --strip-components=1 # This ensures that files are placed directly in /opt/prometheus
+
+- name: List contents of /opt/prometheus to verify extraction
+  command: ls -l /opt/prometheus
 
 - name: Copy Prometheus service file
   copy:
     src: prometheus.service
     dest: /etc/systemd/system/prometheus.service
 
-- name: Enable and start Prometheus
+- name: Check if systemd is available
+  command: systemctl
+  register: systemd_check
+  ignore_errors: yes
+
+- name: Reload systemd (for systems with systemd)
+  command: systemctl daemon-reload
+  when: systemd_check.rc == 0
+
+- name: Enable and start Prometheus (for systems with systemd)
   systemd:
     name: prometheus
     enabled: yes
     state: started
+  when: systemd_check.rc == 0
+
+# Start Prometheus manually if systemd is not available
+- name: Start Prometheus manually
+  shell: "nohup /opt/prometheus/prometheus --config.file=/opt/prometheus/prometheus.yml > /dev/null 2>&1 &"
+  when: systemd_check.rc != 0
