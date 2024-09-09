@@ -29,11 +29,27 @@
     enabled: yes
   become: yes
 
-- name: Install Grafana on Amazon Linux
+- name: Try installing Grafana via YUM
   yum:
     name: grafana
     state: latest
   become: yes
+  ignore_errors: yes
+
+# Fallback to RPM installation if YUM repository doesn't work
+- name: Download Grafana RPM package
+  get_url:
+    url: https://dl.grafana.com/oss/release/grafana-9.5.1-1.x86_64.rpm
+    dest: /tmp/grafana.rpm
+  when: ansible_facts.pkg_mgr == "yum"
+  become: yes
+
+- name: Install Grafana from RPM
+  yum:
+    name: /tmp/grafana.rpm
+    state: present
+  become: yes
+  when: ansible_facts.pkg_mgr == "yum"
 
 - name: Ensure Grafana is running and enabled
   systemd:
@@ -67,22 +83,4 @@
 - name: Display Grafana version from health check
   debug:
     msg: "Grafana version {{ grafana_health.json.version }} is installed"
-  when: grafana_health.status == 200
-
-- name: Check for Grafana updates
-  yum:
-    name: grafana
-    state: latest
-    update_cache: yes
-  check_mode: yes
-  register: grafana_update_check
-  become: yes
-
-- name: Display update status
-  debug:
-    msg: "Grafana update is {{ 'available' if grafana_update_check.changed else 'not available' }}"
-
-- name: Confirm Grafana API is accessible
-  debug:
-    msg: "Grafana API is accessible and functioning correctly"
   when: grafana_health.status == 200
