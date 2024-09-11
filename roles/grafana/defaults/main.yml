@@ -3,3 +3,28 @@ grafana_version: "latest"
 grafana_user: "grafana"
 grafana_group: "grafana"
 grafana_http_port: 3000
+
+
+######################## Amazon Linux ##############################################
+amz_packages:
+  - fontconfig
+  - freetype
+  - urw-fonts
+  - ca-certificates
+
+amz_grafana_packages: "{{ amz_grafana_url }}{{ amz_version }}{{ amz_grafana_arch }}"
+amz_grafana_url: "https://dl.grafana.com/oss/release/grafana-"
+amz_grafana_arch: ".x86_64.rpm "
+amz_version: "9.5.1-1"
+amz_grafana_dest: "/tmp/grafana.rpm"
+
+######################## Ubuntu Linux ##############################################
+
+
+
+######################## Centos Linux ##############################################
+
+
+
+
+######################## Fedora Linux ##############################################

@@ -6,6 +6,7 @@ RUN yum update -y && \
     amazon-linux-extras install epel -y && \
     yum install -y \
     python3 \
+    python3-pip \
     sudo \
     curl \
     ansible && \
@@ -16,6 +17,7 @@ WORKDIR /ansible
 
 # Copy your Ansible files (optional, if testing locally you may mount the volume)
 COPY . /ansible
+RUN pip3 install --upgrade pip
 
 # Set the default command to bash
 CMD ["/bin/bash"]

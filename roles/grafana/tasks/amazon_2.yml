@@ -1,0 +1,78 @@
+---
+
+- name: Install Grafana dependencies
+  yum:
+    name: "{{ amz_packages }}"
+    state: present
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+
+- name: Download Grafana RPM package
+  get_url:
+    url: "{{ amz_grafana_packages }}"
+    dest: "{{ amz_grafana_dest }}"
+
+- name: Install Grafana RPM package
+  yum:
+    name: "{{ amz_grafana_dest }}"
+    state: present
+  register: grafana_installed
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+
+- name: Post Grafana tasks
+  block:
+    - name: Ensure proper permissions on Grafana directories
+      file:
+        path: /var/lib/grafana
+        owner: grafana
+        group: grafana
+        mode: "0755"
+        state: directory
+      become: true
+
+    - name: Check If Grafana service
+      service:
+        name: grafana-server
+        state: started
+      ignore_errors: true
+      become: true
+
+
+    - name: Ensure Grafana is running and enabled via systemd
+      systemd:
+        name: grafana-server
+        state: started
+        enabled: yes
+      become: true
+      when: grafana_service_status.rc == 0
+
+
+    - name: Wait for Grafana to be up and running
+      wait_for:
+        port: 3000
+        timeout: 60
+
+    - name: Pause for 10 seconds to allow Grafana to fully initialize
+      pause:
+        seconds: 10
+
+    - name: Test Grafana API
+      uri:
+        url: "http://localhost:3000/api/health"   # Fallback to manually start the Grafana service
+        method: GET
+      register: grafana_health
+      retries: 3
+      delay: 5
+      until: grafana_health.status == 200   # Fallback to manually start the Grafana service
+
+
+    - name: Display update status
+      debug:
+        msg: "Grafana update is {{ 'available' if grafana_update_check.changed else 'not available' }}"
+
+    - name: Confirm Grafana API is accessible
+      debug:
+        msg: "Grafana API is accessible and functioning correctly"
+      when: grafana_health.status == 200
+  when: grafana_installed is succeeded
