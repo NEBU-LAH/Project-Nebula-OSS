@@ -92,10 +92,10 @@ Together, we are building a comprehensive collection of playbooks for the top 50
 
 The ones struck-through are already available, feel free to review it and share feedback.
 
-1. ~~**Grafana** - Monitoring and analytics platform.~~ ✅ Completed
-2. ~~**Prometheus** - Monitoring system and time-series database.~~ ✅ Completed
+1. **Grafana** - Monitoring and analytics platform.~~ ✅ Completed
+2. **Prometheus** - Monitoring system and time-series database.~~ ✅ Completed
 3. **SonarQube** - Continuous inspection of code quality.
-4. ~~**Netdata** - Real-time performance monitoring.~~ ✅ Completed
+4. **Netdata** - Real-time performance monitoring.~~ ✅ Completed
 5. **Jenkins** - Automation server for continuous integration and delivery.
 6. **Docker** - Containerization platform for developing and running applications.
 7. **Kubernetes** - Container orchestration platform.
@@ -142,6 +142,64 @@ The ones struck-through are already available, feel free to review it and share 
 48. **Velero** - Disaster recovery tool for Kubernetes.
 49. **Tekton** - Kubernetes-native continuous integration and delivery pipelines.
 50. **Thanos** - Highly available Prometheus setup with long-term storage capabilities.
+
+### Testing
+
+| Item                          | Amazon Linux | Ubuntu | CentOS | Fedora |
+|-------------------------------|--------------|--------|--------|--------|
+| Grafana                       | ✅           | ✅     | ✅     | ✅     |
+| Prometheus                    | ✅           | ✅     | ✅     | ✅     |
+| SonarQube                     |              |        |        |        |
+| Netdata                       | ✅           | ✅     | ✅     | ✅     |
+| Jenkins                       |              |        |        |        |
+| Docker                        |              |        |        |        |
+| Kubernetes                    |              |        |        |        |
+| Terraform                     |              |        |        |        |
+| Ansible                       |              |        |        |        |
+| Nagios                        |              |        |        |        |
+| Elasticsearch                 |              |        |        |        |
+| Logstash                      |              |        |        |        |
+| Kibana                        |              |        |        |        |
+| Apache Kafka                  |              |        |        |        |
+| Vault                         |              |        |        |        |
+| Consul                        |              |        |        |        |
+| Nginx                         |              |        |        |        |
+| HAProxy                       |              |        |        |        |
+| Istio                         |              |        |        |        |
+| CircleCI                      |              |        |        |        |
+| GitLab CI/CD                  |              |        |        |        |
+| Travis CI                     |              |        |        |        |
+| TeamCity                      |              |        |        |        |
+| Packer                        |              |        |        |        |
+| Chef                          |              |        |        |        |
+| Puppet                        |              |        |        |        |
+| Vagrant                       |              |        |        |        |
+| Spinnaker                     |              |        |        |        |
+| Argo CD                       |              |        |        |        |
+| Drone                         |              |        |        |        |
+| New Relic                     |              |        |        |        |
+| Datadog                       |              |        |        |        |
+| Splunk                        |              |        |        |        |
+| Sentry                        |              |        |        |        |
+| PagerDuty                     |              |        |        |        |
+| Opsgenie                      |              |        |        |        |
+| Fluentd                       |              |        |        |        |
+| Graylog                       |              |        |        |        |
+| LogDNA                        |              |        |        |        |
+| Promtail                      |              |        |        |        |
+| Loki                          |              |        |        |        |
+| Falco                         |              |        |        |        |
+| Sysdig                        |              |        |        |        |
+| Artifactory                   |              |        |        |        |
+| Nexus Repository              |              |        |        |        |
+| MinIO                         |              |        |        |        |
+| Harbor                        |              |        |        |        |
+| Velero                        |              |        |        |        |
+| Tekton                        |              |        |        |        |
+| Thanos                        |              |        |        |        |
+
+
+
 
 ### House rules
 
