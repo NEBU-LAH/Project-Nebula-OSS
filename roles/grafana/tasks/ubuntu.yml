@@ -1,92 +1,158 @@
 ---
-- name: Ensure ca-certificates are installed and updated
-  apt:
-    name: ca-certificates
-    state: latest
-    update_cache: yes
-  become: yes
+- name: Docker installation
+  block:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
 
-- name: Clean apt cache
-  apt:
-    autoclean: yes
-  become: yes
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
 
-- name: Download Grafana GPG key manually using curl
-  command: curl -fsSL https://packages.grafana.com/gpg.key -o /tmp/grafana.gpg.key
-  become: yes
+    - name: Create /etc/apt/keyrings directory
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
 
-- name: Add Grafana GPG key from file
-  apt_key:
-    file: /tmp/grafana.gpg.key
-    state: present
-  become: yes
+    - name: Download Docker GPG key to /etc/apt/keyrings/docker.asc
+      shell: sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 
-- name: Add Grafana APT repository
-  apt_repository:
-    repo: "deb https://packages.grafana.com/oss/deb stable main"
-    state: present
-    filename: "grafana"
-  become: yes
+    - name: Add Docker repository to Apt sources
+      copy:
+        content: |
+          deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+        dest: /etc/apt/sources.list.d/docker.list
+        mode: '0644'
 
-- name: Update apt cache
-  apt:
-    update_cache: yes
-  become: yes
+    - name: Update apt package index again
+      apt:
+        update_cache: yes
 
-- name: Install Grafana on Ubuntu
-  apt:
-    name: grafana
-    state: present
-  become: yes
+    - name: Install Docker Engine
+      apt:
+        name:
+          - docker.io
+          - docker-compose
+          - containerd
+        state: present
 
-- name: Ensure Grafana is running and enabled
-  systemd:
-    name: grafana-server
-    state: started
-    enabled: yes
-  become: yes
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
 
-- name: Wait for Grafana to be up and running
-  wait_for:
-    port: 3000
-    timeout: 60
+    - name: Add user to Docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+        state: present
 
-- name: Pause for 10 seconds to allow Grafana to fully initialize
-  pause:
-    seconds: 10
+    - name: Verify Docker installation
+      command: docker --version
+      register: docker_version
+      changed_when: false
 
-- name: Test Grafana API
-  uri:
-    url: "http://localhost:3000/api/health"
-    method: GET
-  register: grafana_health
-  retries: 3
-  delay: 5
-  until: grafana_health.status == 200
+    - name: Print Docker version
+      debug:
+        msg: "Docker version installed: {{ docker_version.stdout }}"
+  when: install_container | bool
 
-- name: Display Grafana health check result
-  debug:
-    var: grafana_health
+# - name: Ensure ca-certificates are installed and updated
+#   apt:
+#     name: ca-certificates
+#     state: latest
+#     update_cache: yes
+#   become: yes
 
-- name: Display Grafana version from health check
-  debug:
-    msg: "Grafana version {{ grafana_health.json.version }} is installed"
-  when: grafana_health.status == 200
+# - name: Clean apt cache
+#   apt:
+#     autoclean: yes
+#   become: yes
 
-- name: Check for Grafana updates
-  apt:
-    name: grafana
-    state: latest
-    update_cache: yes
-  check_mode: yes
-  register: grafana_update_check
-  become: yes
+# - name: Download Grafana GPG key manually using curl
+#   command: curl -fsSL https://packages.grafana.com/gpg.key -o /tmp/grafana.gpg.key
+#   become: yes
 
-- name: Display update status
-  debug:
-    msg: "Grafana update is {{ 'available' if grafana_update_check.changed else 'not available' }}"
+# - name: Add Grafana GPG key from file
+#   apt_key:
+#     file: /tmp/grafana.gpg.key
+#     state: present
+#   become: yes
 
-- name: Confirm Grafana API is accessible
-  debug:
-    msg: "Grafana API is accessible and functioning correctly"
-  when: grafana_health.status == 200
+# - name: Add Grafana APT repository
+#   apt_repository:
+#     repo: "deb https://packages.grafana.com/oss/deb stable main"
+#     state: present
+#     filename: "grafana"
+#   become: yes
+
+# - name: Update apt cache
+#   apt:
+#     update_cache: yes
+#   become: yes
+
+# - name: Install Grafana on Ubuntu
+#   apt:
+#     name: grafana
+#     state: present
+#   become: yes
+
+# - name: Ensure Grafana is running and enabled
+#   systemd:
+#     name: grafana-server
+#     state: started
+#     enabled: yes
+#   become: yes
+
+# - name: Wait for Grafana to be up and running
+#   wait_for:
+#     port: 3000
+#     timeout: 60
+
+# - name: Pause for 10 seconds to allow Grafana to fully initialize
+#   pause:
+#     seconds: 10
+
+# - name: Test Grafana API
+#   uri:
+#     url: "http://localhost:3000/api/health"
+#     method: GET
+#   register: grafana_health
+#   retries: 3
+#   delay: 5
+#   until: grafana_health.status == 200
+
+# - name: Display Grafana health check result
+#   debug:
+#     var: grafana_health
+
+# - name: Display Grafana version from health check
+#   debug:
+#     msg: "Grafana version {{ grafana_health.json.version }} is installed"
+#   when: grafana_health.status == 200
+
+# - name: Check for Grafana updates
+#   apt:
+#     name: grafana
+#     state: latest
+#     update_cache: yes
+#   check_mode: yes
+#   register: grafana_update_check
+#   become: yes
+
+# - name: Display update status
+#   debug:
+#     msg: "Grafana update is {{ 'available' if grafana_update_check.changed else 'not available' }}"
+
+# - name: Confirm Grafana API is accessible
+#   debug:
+#     msg: "Grafana API is accessible and functioning correctly"
+#   when: grafana_health.status == 200

@@ -1,0 +1,36 @@
+---
+- name: Docker installation
+  block:
+    - name: Update package index
+      yum:
+        update_cache: yes
+
+    - name: Install required packages
+      yum:
+        name:
+          - ca-certificates
+          - docker
+        state: present
+
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add user to Docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+        state: present
+
+    - name: Verify Docker installation
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Print Docker version
+      debug:
+        msg: "Docker version installed: {{ docker_version.stdout }}"
+  when: install_container | bool
