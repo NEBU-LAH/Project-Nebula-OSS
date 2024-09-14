@@ -146,11 +146,11 @@ The ones struck-through are already available, feel free to review it and share 
 ### Testing
 | Item                          | Amazon Linux 2 | Amazon Linux 2023 | Ubuntu 24 | Ubuntu 22 | Ubuntu 20 | CentOS | Fedora | Debian 12 |
 |-------------------------------|-----------------|--------------------|-----------|-----------|-----------|--------|--------|-----------|
-| Docker Installation           | ✅              | ✅                 | ✅        | ✅        |           |        |        | ✅        |
-| Grafana                       | ✅              | ✅                 | ✅        | ✅        | ✅        | ✅     | ✅     | ✅        |
-| Prometheus                    | ✅              | ✅                 | ✅        | ✅        | ✅        | ✅     | ✅     | ✅        |
+| Docker Installation           | ✅              | ✅                 | ✅        | ✅        |           |        |        |✅         |
+| Grafana                       |                 |                    |           |           |           |        |        |           |
+| Prometheus                    |                 |                    |           |           |           |        |        |           |
 | SonarQube                     |                 |                    |           |           |           |        |        |           |
-| Netdata                       | ✅              | ✅                 | ✅        | ✅        | ✅        | ✅     | ✅     | ✅        |
+| Netdata                       |                 |                    |           |           |           |        |        |           |
 | Jenkins                       |                 |                    |           |           |           |        |        |           |
 | Docker                        |                 |                    |           |           |           |        |        |           |
 | Kubernetes                    |                 |                    |           |           |           |        |        |           |
