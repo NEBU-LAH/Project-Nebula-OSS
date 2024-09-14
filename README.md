@@ -143,7 +143,16 @@ The ones struck-through are already available, feel free to review it and share 
 49. **Tekton** - Kubernetes-native continuous integration and delivery pipelines.
 50. **Thanos** - Highly available Prometheus setup with long-term storage capabilities.
 
+
 ### Testing
+The follwing testing official amazon images were used:
+-  ami-0e86e20dae9224db8"        #24
+-  iam: "ami-0a0e5d9c7acc336f1"  #22.04
+-  iam: "ami-032346ab877c418af"  #20.04
+-  iam: "ami-064519b8c76274859"  # Debian 12
+-  iam: "ami-0182f373e66f89c85" #amazon 2023
+-  iam: "ami-0a5c3558529277641" #amazon linux 2
+
 | Item                          | Amazon Linux 2 | Amazon Linux 2023 | Ubuntu 24 | Ubuntu 22 | Ubuntu 20 | CentOS | Fedora | Debian 12 |
 |-------------------------------|-----------------|--------------------|-----------|-----------|-----------|--------|--------|-----------|
 | Docker Installation           | ✅              | ✅                 | ✅        | ✅        |           |        |        |✅         |
