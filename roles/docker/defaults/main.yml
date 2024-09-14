@@ -1,4 +1,8 @@
 ---
+grafana_version: "latest"
+grafana_user: "grafana"
+grafana_group: "grafana"
+grafana_http_port: 3000
 install_container: true
 
 ######################## Amazon Linux ##############################################

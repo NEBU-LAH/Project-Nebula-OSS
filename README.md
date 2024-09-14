@@ -92,10 +92,10 @@ Together, we are building a comprehensive collection of playbooks for the top 50
 
 The ones struck-through are already available, feel free to review it and share feedback.
 
-1. **Grafana** - Monitoring and analytics platform.~~ ✅ Completed
-2. **Prometheus** - Monitoring system and time-series database.~~ ✅ Completed
+1. **Grafana** - Monitoring and analytics platform.
+2. **Prometheus** - Monitoring system and time-series database.
 3. **SonarQube** - Continuous inspection of code quality.
-4. **Netdata** - Real-time performance monitoring.~~ ✅ Completed
+4. **Netdata** - Real-time performance monitoring.
 5. **Jenkins** - Automation server for continuous integration and delivery.
 6. **Docker** - Containerization platform for developing and running applications.
 7. **Kubernetes** - Container orchestration platform.
@@ -143,60 +143,70 @@ The ones struck-through are already available, feel free to review it and share 
 49. **Tekton** - Kubernetes-native continuous integration and delivery pipelines.
 50. **Thanos** - Highly available Prometheus setup with long-term storage capabilities.
 
-### Testing
 
-| Item                          | Amazon Linux | Ubuntu | CentOS | Fedora |
-|-------------------------------|--------------|--------|--------|--------|
-| Grafana                       | ✅           | ✅     | ✅     | ✅     |
-| Prometheus                    | ✅           | ✅     | ✅     | ✅     |
-| SonarQube                     |              |        |        |        |
-| Netdata                       | ✅           | ✅     | ✅     | ✅     |
-| Jenkins                       |              |        |        |        |
-| Docker                        |              |        |        |        |
-| Kubernetes                    |              |        |        |        |
-| Terraform                     |              |        |        |        |
-| Ansible                       |              |        |        |        |
-| Nagios                        |              |        |        |        |
-| Elasticsearch                 |              |        |        |        |
-| Logstash                      |              |        |        |        |
-| Kibana                        |              |        |        |        |
-| Apache Kafka                  |              |        |        |        |
-| Vault                         |              |        |        |        |
-| Consul                        |              |        |        |        |
-| Nginx                         |              |        |        |        |
-| HAProxy                       |              |        |        |        |
-| Istio                         |              |        |        |        |
-| CircleCI                      |              |        |        |        |
-| GitLab CI/CD                  |              |        |        |        |
-| Travis CI                     |              |        |        |        |
-| TeamCity                      |              |        |        |        |
-| Packer                        |              |        |        |        |
-| Chef                          |              |        |        |        |
-| Puppet                        |              |        |        |        |
-| Vagrant                       |              |        |        |        |
-| Spinnaker                     |              |        |        |        |
-| Argo CD                       |              |        |        |        |
-| Drone                         |              |        |        |        |
-| New Relic                     |              |        |        |        |
-| Datadog                       |              |        |        |        |
-| Splunk                        |              |        |        |        |
-| Sentry                        |              |        |        |        |
-| PagerDuty                     |              |        |        |        |
-| Opsgenie                      |              |        |        |        |
-| Fluentd                       |              |        |        |        |
-| Graylog                       |              |        |        |        |
-| LogDNA                        |              |        |        |        |
-| Promtail                      |              |        |        |        |
-| Loki                          |              |        |        |        |
-| Falco                         |              |        |        |        |
-| Sysdig                        |              |        |        |        |
-| Artifactory                   |              |        |        |        |
-| Nexus Repository              |              |        |        |        |
-| MinIO                         |              |        |        |        |
-| Harbor                        |              |        |        |        |
-| Velero                        |              |        |        |        |
-| Tekton                        |              |        |        |        |
-| Thanos                        |              |        |        |        |
+### Testing
+The follwing testing official amazon images were used:
+-  ami-0e86e20dae9224db8"        #24
+-  iam: "ami-0a0e5d9c7acc336f1"  #22.04
+-  iam: "ami-032346ab877c418af"  #20.04
+-  iam: "ami-064519b8c76274859"  # Debian 12
+-  iam: "ami-0182f373e66f89c85" #amazon 2023
+-  iam: "ami-0a5c3558529277641" #amazon linux 2
+
+| Item                          | Amazon Linux 2 | Amazon Linux 2023 | Ubuntu 24 | Ubuntu 22 | Ubuntu 20 | CentOS | Fedora | Debian 12 |
+|-------------------------------|-----------------|--------------------|-----------|-----------|-----------|--------|--------|-----------|
+| Docker Installation           | ✅              | ✅                 | ✅        | ✅        |           |        |        |✅         |
+| Grafana                       |                 |                    |           |           |           |        |        |           |
+| Prometheus                    |                 |                    |           |           |           |        |        |           |
+| SonarQube                     |                 |                    |           |           |           |        |        |           |
+| Netdata                       |                 |                    |           |           |           |        |        |           |
+| Jenkins                       |                 |                    |           |           |           |        |        |           |
+| Docker                        |                 |                    |           |           |           |        |        |           |
+| Kubernetes                    |                 |                    |           |           |           |        |        |           |
+| Terraform                     |                 |                    |           |           |           |        |        |           |
+| Ansible                       |                 |                    |           |           |           |        |        |           |
+| Nagios                        |                 |                    |           |           |           |        |        |           |
+| Elasticsearch                 |                 |                    |           |           |           |        |        |           |
+| Logstash                      |                 |                    |           |           |           |        |        |           |
+| Kibana                        |                 |                    |           |           |           |        |        |           |
+| Apache Kafka                  |                 |                    |           |           |           |        |        |           |
+| Vault                         |                 |                    |           |           |           |        |        |           |
+| Consul                        |                 |                    |           |           |           |        |        |           |
+| Nginx                         |                 |                    |           |           |           |        |        |           |
+| HAProxy                       |                 |                    |           |           |           |        |        |           |
+| Istio                         |                 |                    |           |           |           |        |        |           |
+| CircleCI                      |                 |                    |           |           |           |        |        |           |
+| GitLab CI/CD                  |                 |                    |           |           |           |        |        |           |
+| Travis CI                     |                 |                    |           |           |           |        |        |           |
+| TeamCity                      |                 |                    |           |           |           |        |        |           |
+| Packer                        |                 |                    |           |           |           |        |        |           |
+| Chef                          |                 |                    |           |           |           |        |        |           |
+| Puppet                        |                 |                    |           |           |           |        |        |           |
+| Vagrant                       |                 |                    |           |           |           |        |        |           |
+| Spinnaker                     |                 |                    |           |           |           |        |        |           |
+| Argo CD                       |                 |                    |           |           |           |        |        |           |
+| Drone                         |                 |                    |           |           |           |        |        |           |
+| New Relic                     |                 |                    |           |           |           |        |        |           |
+| Datadog                       |                 |                    |           |           |           |        |        |           |
+| Splunk                        |                 |                    |           |           |           |        |        |           |
+| Sentry                        |                 |                    |           |           |           |        |        |           |
+| PagerDuty                     |                 |                    |           |           |           |        |        |           |
+| Opsgenie                      |                 |                    |           |           |           |        |        |           |
+| Fluentd                       |                 |                    |           |           |           |        |        |           |
+| Graylog                       |                 |                    |           |           |           |        |        |           |
+| LogDNA                        |                 |                    |           |           |           |        |        |           |
+| Promtail                      |                 |                    |           |           |           |        |        |           |
+| Loki                          |                 |                    |           |           |           |        |        |           |
+| Falco                         |                 |                    |           |           |           |        |        |           |
+| Sysdig                        |                 |                    |           |           |           |        |        |           |
+| Artifactory                   |                 |                    |           |           |           |        |        |           |
+| Nexus Repository              |                 |                    |           |           |           |        |        |           |
+| MinIO                         |                 |                    |           |           |           |        |        |           |
+| Harbor                        |                 |                    |           |           |           |        |        |           |
+| Velero                        |                 |                    |           |           |           |        |        |           |
+| Tekton                        |                 |                    |           |           |           |        |        |           |
+| Thanos                        |                 |                    |           |           |           |        |        |           |
+
 
 
 

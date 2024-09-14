@@ -11,4 +11,5 @@
   become: yes
 
   roles:
-    - grafana
+    - docker
+    #- grafana
